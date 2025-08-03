@@ -60,7 +60,9 @@ function startMusic() {
                     document.getElementById("loading").classList.remove("active");
                     const playlist = ytlinks[mood] || ytlinks["neutral"];
                    const randomIndex = Math.floor(Math.random() * playlist.length);
-chrome.tabs.create({ url: playlist[randomIndex], active: false });
+chrome.tabs.create({ url: playlist[randomIndex], active: false },(tab)=>{
+    musicTabID = tab.id;
+});
                 }).catch(error => {
                     console.error("Error:", error);
                     document.getElementById("sentiment").textContent = "Error analyzing mood.";
@@ -72,7 +74,19 @@ chrome.tabs.create({ url: playlist[randomIndex], active: false });
 }
 
 function stopMusic() {
-    document.getElementById("sentiment").textContent = "Stopped.";
+    if (musicTabID !== null) {
+        chrome.tabs.remove(musicTabID, () => {
+            if (chrome.runtime.lastError) {
+                console.error("Error closing tab:", chrome.runtime.lastError);
+                document.getElementById("sentiment").textContent = "Error closing music tab.";
+            } else {
+                document.getElementById("sentiment").textContent = "Music stopped and tab closed.";
+            }
+            musicTabID = null;
+        });
+    } else {
+        document.getElementById("sentiment").textContent = "No music tab to close.";
+    }
 }
 
 async function renderPlaylist(emotion = "joy") {
