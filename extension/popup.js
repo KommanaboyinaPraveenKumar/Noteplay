@@ -2,14 +2,14 @@ let ytlinks = {}; // Start empty
 
 function loadPlaylists(callback) {
     const defaultLinks = {
-        "joy": ["https://music.youtube.com/playlist?list=PLIILL6veL7802G94eulr2fzj0wz7CwKqh&si=XTHQcHdOLuQ8M6Yx"],
-        "sadness": ["https://music.youtube.com/playlist?list=RDCLAK5uy_mIY1OIxvwlIkS_U3MX6O5uHZXkB-LiJu8&playnext=1&si=oVPIyzNOllfFtusP"],
-        "anger": ["https://music.youtube.com/playlist?list=PLVqKN6-ShO5-x0tCYRMcWGnl3cFq9xQ4u&si=L7DfjOosBVp2SieX"],
-        "fear": ["https://music.youtube.com/playlist?list=PLK_AsfKklsqLvebnjylCUkL8Bg3hNkFM5&si=tDsC4RcMuVZVvq7B"],
-        "surprise": ["https://music.youtube.com/playlist?list=PLkEa12OIIjYxIlJ-d2rcviWCJUD-O3Cyy&si=uDXghYaolVQfeSRe"],
-        "love": ["https://music.youtube.com/playlist?list=PLID4CZACkMJSzwn5Z535pW3YMXQRPfVS_&si=c4VcArxFJAQ1uCso"],
-        "neutral": ["https://music.youtube.com/playlist?list=PL6aT4mpdQvlqSHaNaG9u5BOoOn2f3Xx8S&si=Cj4GThdcX4Q18H8x"],
-        "disgust": ["https://music.youtube.com/playlist?list=PLeLX7phiUOdomyHtTjuZUwtANxBjRwaF_&si=fG-Qmlh0ats0riOE"]
+        "joy": ["https://youtu.be/LBNWehxbS2M?si=3sqe-f1oD6Uci1T7"],
+    "sadness": ["https://youtu.be/BZsXcc_tC-o?si=zh77CjWX1dC46QWO"],
+    "anger": ["https://youtu.be/Qt5wB7KXSaM?si=_Ci3pwVS7FfQtbEt"],
+    "fear": ["https://music.youtube.com/watch?v=8njnTRKGdYw&si=YAo3Kvsr3bOOL29o"],
+    "surprise": ["https://youtu.be/y1yNk8VeqqI?si=toHFxxJxHop0xttc"],
+    "love": ["https://music.youtube.com/playlist?list=OLAK5uy_nAF_sXI8U1xc8DjaTMUcf7v1BTxYfCQTQ&si=x4wm-0WUBWsDxTO_"],
+    "neutral": ["https://youtu.be/po1pHx9eSm4?si=NsXmLI4gi--p4u8S"],
+    "disgust": ["https://music.youtube.com/playlist?list=PLeLX7phiUOdomyHtTjuZUwtANxBjRwaF_&si=fG-Qmlh0ats0riOE"]
     };
     chrome.storage.local.get({ ytlinks: defaultLinks }, (data) => {
         ytlinks = data.ytlinks;
@@ -307,7 +307,7 @@ function renderMoodOfTheDay() {
       sadness: 'sadness.webp', 
       anger: 'angry.webp',
       fear: 'fear.webp',
-      surprise: 'surprise.webp',
+      surprise: 'Surprise.webp',
       love: 'love.webp',
       neutral: 'neutral.webp',
       disgust: 'disgust.webp'
