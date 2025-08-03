@@ -18,24 +18,24 @@ function loadPlaylists(callback) {
 }
 
 function startMusic() {
-    console.log("Start button clicked"); // Debug log
+    console.log("Start button clicked"); 
     document.getElementById("loading").classList.add("active");
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         const tab = tabs[0];
-        console.log("Current tab:", tab.url); // Debug log
-        // Use the same method as automatic analysis - get text directly from content script
+        console.log("Current tab:", tab.url); 
+        
         chrome.tabs.sendMessage(tab.id, { action: "getPageText" }, (response) => {
             if (chrome.runtime.lastError || !response) {
-                console.log("Error getting page text:", chrome.runtime.lastError); // Debug log
+                console.log("Error getting page text:", chrome.runtime.lastError); 
                 document.getElementById("sentiment").textContent = "Could not get page text. Try a different tab.";
                 document.getElementById("loading").classList.remove("active");
                 return;
             } else {
                 const text = response.text;
-                console.log("Text being analyzed:", text.substring(0, 200) + "..."); // Debug log
-                console.log("Text length:", text.length); // Debug log
+                console.log("Text being analyzed:", text.substring(0, 200) + "..."); 
+                console.log("Text length:", text.length); 
                 
-                // Check if it's a Google search page first
+               
                 const url = new URL(tab.url);
                 const isGoogleSearch = url.hostname.includes('google.com') && 
                                     (url.pathname.includes('/search') || url.searchParams.has('q'));
