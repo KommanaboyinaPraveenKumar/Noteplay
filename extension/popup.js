@@ -60,8 +60,9 @@ function startMusic() {
                     document.getElementById("loading").classList.remove("active");
                     const playlist = ytlinks[mood] || ytlinks["neutral"];
                    const randomIndex = Math.floor(Math.random() * playlist.length);
-chrome.tabs.create({ url: playlist[randomIndex], active: false },(tab)=>{
-    musicTabID = tab.id;
+chrome.tabs.create({ url: playlist[randomIndex], active: false }, (tab) => {
+    musicTabID = tab.id; 
+    chrome.storage.local.set({ musicTabID: tab.id });
 });
                 }).catch(error => {
                     console.error("Error:", error);
@@ -72,22 +73,26 @@ chrome.tabs.create({ url: playlist[randomIndex], active: false },(tab)=>{
         });
     });
 }
-
 function stopMusic() {
-    if (musicTabID !== null) {
-        chrome.tabs.remove(musicTabID, () => {
-            if (chrome.runtime.lastError) {
-                console.error("Error closing tab:", chrome.runtime.lastError);
-                document.getElementById("sentiment").textContent = "Error closing music tab.";
-            } else {
-                document.getElementById("sentiment").textContent = "Music stopped and tab closed.";
-            }
-            musicTabID = null;
-        });
-    } else {
-        document.getElementById("sentiment").textContent = "No music tab to close.";
-    }
+    chrome.storage.local.get("musicTabID", (data) => {
+        const musicTabID = data.musicTabID;
+
+        if (musicTabID !== null && musicTabID !== undefined) {
+            chrome.tabs.remove(musicTabID, () => {
+                if (chrome.runtime.lastError) {
+                    console.error("Error closing tab:", chrome.runtime.lastError);
+                    document.getElementById("sentiment").textContent = "Error closing music tab.";
+                } else {
+                    document.getElementById("sentiment").textContent = "Music stopped and tab closed.";
+                    chrome.storage.local.remove("musicTabID");
+                }
+            });
+        } else {
+            document.getElementById("sentiment").textContent = "No music tab to close.";
+        }
+    });
 }
+
 
 async function renderPlaylist(emotion = "joy") {
     const playlistDiv = document.getElementById("playlist");
