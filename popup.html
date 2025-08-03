@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotePlay</title>
+    <link rel="stylesheet" href="popup.css">
+    <style>
+        #loading { display: none; }
+        #loading.active { display: block; }
+        
+        h1 { font-size: 30px;color: #22d3c1; text-shadow: 0 0 4px #102e34; }
+       
+        .app-background-image {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            object-fit: cover;
+        }
+
+.delete-btn {
+    background: #ff4444;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.delete-btn:hover {
+    background: #cc0000;
+}
+.playlist-item {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #33f5c3; /* Neon teal color */
+    font-size: 16px;
+  }
+
+  select {
+    background-color: transparent;
+    color: #33f5c3;
+    border: 1px solid #33f5c3;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 16px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    width: 100px;
+    cursor: pointer;
+  }
+
+  select:focus {
+    outline: none;
+    box-shadow: 0 0 6px #33f5c3;
+  }
+  select option {
+      background-color: #000;  
+      color: #33f5c3;          
+    }
+    .input{
+        background-color: transparent;
+    color: #33f5c3;
+    border: 1px solid #33f5c3;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 16px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+   
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    width: 100px;
+    cursor: pointer;
+    }
+   
+.overall-mood-display {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    color: #33f5c3;
+  }
+  
+  
+  .overall-mood-badge,
+  .emotion-badge {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+  
+ 
+  .mood-summary-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #33f5c3;
+    border-radius: 8px;
+  }
+  
+ 
+  .mood-summary-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    color: #33f5c3;
+  }
+  
+  
+  .mood-summary-item:last-child {
+    border-bottom: none;
+  }
+  
+  
+  .mood-summary-list::-webkit-scrollbar {
+    width: 8px;
+  }
+  .mood-summary-list::-webkit-scrollbar-track {
+    background: #000;
+  }
+  .mood-summary-list::-webkit-scrollbar-thumb {
+    background-color: #33f5c3;
+    border-radius: 10px;
+  }
+  
+  
+  .mood-summary-list {
+    scrollbar-width: thin;
+    scrollbar-color: #33f5c3 #000;
+  }
+
+  #mood-visits ul::-webkit-scrollbar {
+    width: 8px;
+  }
+  #mood-visits ul::-webkit-scrollbar-track {
+    background: #000;
+  }
+  #mood-visits ul::-webkit-scrollbar-thumb {
+    background-color: #33f5c3;
+    border-radius: 10px;
+  }
+  
+  
+  #mood-visits ul {
+    scrollbar-width: thin;
+    scrollbar-color: #33f5c3 #000;
+  }
+  
+  
+  .tab-navigation {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .tab-btn {
+    background: transparent;
+    color: #33f5c3;
+    border: 1px solid #33f5c3;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+  }
+  
+  .tab-btn:hover {
+    background: rgba(51, 245, 195, 0.1);
+  }
+  
+  .tab-btn.active {
+    background: #33f5c3;
+    color: #000;
+  }
+  
+  .tab-content {
+    display: block;
+  }
+  
+  .tab-content.hidden {
+    display: none;
+  }
+
+    </style>
+</head>
+<body>
+    
+    <section id="hero-section">
+      <div class="app-container">
+        <main class="app-card" style="height:auto; min-height:600px; overflow-y:auto;">
+          <header class="app-header">
+            <h1  class="app-title">NotePlay</h1>
+            <p class="app-description">Playlist manager with sentiment analysis </p>
+          </header>
+          
+          <div class="tab-navigation" style="margin-bottom: 20px;">
+            <button id="tab-playlist" class="tab-btn active">Playlist</button>
+            <button id="tab-mood" class="tab-btn">Mood of the Day</button>
+          </div>
+          
+         
+          <div id="playlist-section" class="tab-content">
+            <div class="app-controls">
+              <div class="button-group" style="font-size:25px;">
+                <button id="start" class="btn start-btn">Start</button>
+                <button id="stop" class="btn stop-btn">Stop</button>
+              </div>
+              <button id="editplaylist" class="btn edit-btn">Edit Playlist</button>
+              <p id="sentiment" class="app-status">Ready</p>
+              <div id="loading" class="blur-container">
+                <p class="app-status">Loading...</p>
+              </div>
+              <div id="playlist" class="app-status"></div>
+            </div>
+          </div>
+          
+          
+          <div id="mood-section" class="tab-content" style="display: none;">
+            <h2 class="app-title" style="font-size:25px;">Mood of the Day</h2>
+            <div id="mood-summary">
+              <p class="app-description" style="font-size:20px;">Loading mood data...</p>
+            </div>
+            <div id="mood-visits"></div>
+            <button id="clear-mood-history" class="btn delete-btn" style="font-size: 14px; padding: 8px 16px;">Clear History</button>
+          </div>
+        </main>
+      </div>
+    </section>
+    <script src="popup.js">
+        let edited={"joy":false,"sadness":false,"anger":false,"fear":false,"surprise":false,"love":false,"neutral":false,"disgust":false};
+        const ytlinks = {
+    "joy": ["https://music.youtube.com/playlist?list=PLIILL6veL7802G94eulr2fzj0wz7CwKqh&si=XTHQcHdOLuQ8M6Yx"],
+    "sadness": ["https://music.youtube.com/playlist?list=RDCLAK5uy_mIY1OIxvwlIkS_U3MX6O5uHZXkB-LiJu8&playnext=1&si=oVPIyzNOllfFtusP"],
+    "anger": ["https://music.youtube.com/playlist?list=PLVqKN6-ShO5-x0tCYRMcWGnl3cFq9xQ4u&si=L7DfjOosBVp2SieX"],
+    "fear": ["https://music.youtube.com/playlist?list=PLK_AsfKklsqLvebnjylCUkL8Bg3hNkFM5&si=tDsC4RcMuVZVvq7B"],
+    "surprise": ["https://music.youtube.com/playlist?list=PLkEa12OIIjYxIlJ-d2rcviWCJUD-O3Cyy&si=uDXghYaolVQfeSRe"],
+    "love": ["https://music.youtube.com/playlist?list=PLID4CZACkMJSzwn5Z535pW3YMXQRPfVS_&si=c4VcArxFJAQ1uCso"],
+    "neutral": ["https://music.youtube.com/playlist?list=PL6aT4mpdQvlqSHaNaG9u5BOoOn2f3Xx8S&si=Cj4GThdcX4Q18H8x"],
+    "disgust": ["https://music.youtube.com/playlist?list=PLeLX7phiUOdomyHtTjuZUwtANxBjRwaF_&si=fG-Qmlh0ats0riOE"]
+};
+        function editplaylist(){
+            document.getElementById("playlist").innerHTML = `<label>emotion: </label>
+            <select id="selection">
+                <option value="joy">Joy</option>
+                <option value="sadness">Sadness</option>
+                <option value="anger">Anger</option>
+                <option value="fear">Fear</option>
+                <option value="surprise">Surprise</option>
+                <option value="love">Love</option>
+                <option value="neutral">Neutral</option>
+                <option value="disgust">Disgust</option>
+            </select>`;
+            document.getElementById("playlist").innerHTML += `<select id="add/delete">
+                <option value="add">Add</option>
+                <option value="delete">Delete</option>`;
+                if(document.getElementById("add/delete").value==="add"){
+            document.getElementById("playlist").innerHTML += `<input type="text" id="playlisturl" placeholder="Enter playlist URL" />`;
+            document.getElementById("playlist").innerHTML += `<button id="addplaylist">Add your own songs</button>`;
+            document.getElementById("addplaylist").addEventListener("click", function() {
+                const emotion = document.getElementById("selection").value;
+                const url = document.getElementById("playlisturl").value;
+                if (ytlinks[emotion]) {
+                    ytlinks[emotion].push(url);
+                    edited[emotion] = true;
+                    alert(`Playlist for ${emotion} updated!`);
+                } else {
+                    alert("Invalid emotion selected.");
+                }
+                
+            });}
+            else{
+                document.getElementById("playlist").innerHTML += `<button id="deleteplaylist">Delete your own songs</button>`;
+                document.getElementById("deleteplaylist").addEventListener("click", function() {
+                    const emotion = document.getElementById("selection").value;
+                    if (ytlinks[emotion]) {
+                        ytlinks[emotion] = [];
+                        edited[emotion] = true;
+                        alert(`Playlist for ${emotion} cleared!`);
+                    } else {
+                        alert("Invalid emotion selected.");
+                    }
+                });
+            }
+
+
+        }
+        
+    </script>
+    
+</body>
+</html>

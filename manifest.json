@@ -1,0 +1,43 @@
+{
+    "manifest_version": 3,
+    "name": "NotePlay",
+    "version": "1.02",
+    "description": "an extension to play music according to mood of the website you are on",
+    "host_permissions": [
+  "https://*/*",
+  "http://*/*",
+  "*://www.youtube.com/*"
+],
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "storage",
+        "tabs",
+        "alarms"
+    ],
+    "background":{
+        "service_worker":"background.js"
+    },
+    
+    "icons":{
+        "16":"icon.jpg",
+        "32":"icon.jpg"
+    },
+    "action":{
+        "default_popup": "popup.html",
+        "default_icon": "icon.jpg"
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": ["*.png", "*.jpg", "*.webp"],
+            "matches": ["<all_urls>"]
+        }
+    ]
+    
+}
